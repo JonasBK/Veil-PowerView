@@ -996,6 +996,9 @@ function Invoke-ShareFinder {
 
         .PARAMETER Domain
         Domain to query for machines.
+        
+        .PARAMETER NoDescription
+        Do not concatenate share description in output.
 
         .EXAMPLE
         > Invoke-ShareFinder
@@ -1051,7 +1054,10 @@ function Invoke-ShareFinder {
         $Jitter = .3,
 
         [String]
-        $Domain
+        $Domain,
+
+        [Switch]
+        $NoDescription
     )
     
     If ($PSBoundParameters['Debug']) {
@@ -1149,7 +1155,11 @@ function Invoke-ShareFinder {
                                 if($netname.ToUpper() -eq "ADMIN$"){
                                     try{
                                         $f=[IO.Directory]::GetFiles($path)
-                                        "\\$server\$netname `t- $remark"
+                                        if ($NoDescription) {
+                                            "\\$server\$netname"
+                                        } else {
+                                            "\\$server\$netname `t- $remark"
+                                        }
                                     }
                                     catch {}
                                 }
@@ -1162,12 +1172,20 @@ function Invoke-ShareFinder {
                                     # check if the user has access to this path
                                     try{
                                         $f=[IO.Directory]::GetFiles($path)
-                                        "\\$server\$netname `t- $remark"
+                                        if ($NoDescription) {
+                                            "\\$server\$netname"
+                                        } else {
+                                            "\\$server\$netname `t- $remark"
+                                        }
                                     }
                                     catch {}
                                 }
                                 else{
-                                    "\\$server\$netname `t- $remark"
+                                    if ($NoDescription) {
+                                        "\\$server\$netname"
+                                    } else {
+                                        "\\$server\$netname `t- $remark"
+                                    }
                                 }
                             } 
                             
@@ -1218,6 +1236,9 @@ function Invoke-ShareFinderThreaded {
         .PARAMETER MaxThreads
         The maximum concurrent threads to execute.
 
+        .PARAMETER NoDescription
+        Do not concatenate share description in output.
+
         .EXAMPLE
         > Invoke-ShareFinder
         Find shares on the domain.
@@ -1255,7 +1276,10 @@ function Invoke-ShareFinderThreaded {
         $Domain,
 
         [Int]
-        $MaxThreads = 10
+        $MaxThreads = 10,
+
+        [Switch]
+        $NoDescription
     )
     
     If ($PSBoundParameters['Debug']) {
@@ -1327,7 +1351,11 @@ function Invoke-ShareFinderThreaded {
                         if($netname.ToUpper() -eq "ADMIN$"){
                             try{
                                 $f=[IO.Directory]::GetFiles($path)
-                                "\\$server\$netname `t- $remark"
+                                if ($NoDescription) {
+                                    "\\$server\$netname"
+                                } else {
+                                    "\\$server\$netname `t- $remark"
+                                }
                             }
                             catch {}
                         }
@@ -1339,12 +1367,20 @@ function Invoke-ShareFinderThreaded {
                             # check if the user has access to this path
                             try{
                                 $f=[IO.Directory]::GetFiles($path)
-                                "\\$server\$netname `t- $remark"
+                                if ($NoDescription) {
+                                    "\\$server\$netname"
+                                } else {
+                                    "\\$server\$netname `t- $remark"
+                                }
                             }
                             catch {}
                         }
                         else{
-                            "\\$server\$netname `t- $remark"
+                            if ($NoDescription) {
+                                "\\$server\$netname"
+                            } else {
+                                "\\$server\$netname `t- $remark"
+                            }
                         }
                     } 
                 }
