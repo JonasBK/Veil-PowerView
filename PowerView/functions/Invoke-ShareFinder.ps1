@@ -1328,7 +1328,7 @@ function Invoke-ShareFinderThreaded {
     # script block that eunmerates a server
     # this is called by the multi-threading code later
     $EnumServerBlock = {
-        param($Server, $Ping, $CheckShareAccess, $ExcludedShares, $CheckAdmin)
+        param($Server, $Ping, $CheckShareAccess, $ExcludedShares, $CheckAdmin, $NoDescription)
 
         # optionally check if the server is up first
         $up = $true
@@ -1443,7 +1443,7 @@ function Invoke-ShareFinderThreaded {
             $ps[$counter].runspacepool = $pool
 
             # add the script block + arguments
-            [void]$ps[$counter].AddScript($EnumServerBlock).AddParameter('Server', $server).AddParameter('Ping', -not $NoPing).AddParameter('CheckShareAccess', $CheckShareAccess).AddParameter('ExcludedShares', $ExcludedShares).AddParameter('CheckAdmin', $CheckAdmin)
+            [void]$ps[$counter].AddScript($EnumServerBlock).AddParameter('Server', $server).AddParameter('Ping', -not $NoPing).AddParameter('CheckShareAccess', $CheckShareAccess).AddParameter('ExcludedShares', $ExcludedShares).AddParameter('CheckAdmin', $CheckAdmin).AddParameter('NoDescription', $NoDescription)
     
             # start job
             $jobs += $ps[$counter].BeginInvoke();
